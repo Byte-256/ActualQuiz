@@ -179,7 +179,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void store_result() {
-        int percentage = score / quizzes.length * 100;
+        int total_questions = quizzes.length;
+        int correct_answers = score;
+
+        float percentage = (float) correct_answers / total_questions * 100;
+        int percentage_int = (int) Math.floor(percentage);
+
 
         long now = System.currentTimeMillis();
 
@@ -187,7 +192,7 @@ public class GameActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
 
         String history = pref.getString("history", "");
-        String newEntry = "Date: " + now + " - Score: " + score + "/" + quizzes.length + " (" + percentage + "%)\n";
+        String newEntry = "Date: " + now + " - Score: " + score + "/" + quizzes.length + " (" + percentage_int + "%)\n";
 
         editor.putString("history", history + newEntry);
         editor.apply();
@@ -195,10 +200,13 @@ public class GameActivity extends AppCompatActivity {
 
     private void final_screen() {
         store_result();
-        int percentage =  score / quizzes.length * 100;
+        int total_questions = quizzes.length;
+        int correct_answers = score;
+        float percentage = (float) correct_answers / total_questions * 100;
+        int percentage_int = (int) Math.floor(percentage);
 
         Intent intent = new Intent(GameActivity.this, ResultActivity.class);
-        intent.putExtra("percentage", percentage);
+        intent.putExtra("percentage", percentage_int);
 
         startActivity(intent);
         finish();
