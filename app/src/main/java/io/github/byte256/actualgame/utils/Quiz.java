@@ -2,9 +2,9 @@ package io.github.byte256.actualgame.utils;
 
 public class Quiz {
 
-    private String question;
-    private String[] options;
-    private String correctAnswer;
+    private final String question;
+    private final String[] options;
+    private final String correctAnswer;
 
     public Quiz(String question, String[] options, String correctAnswer) {
         this.question = question;

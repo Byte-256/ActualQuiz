@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -33,7 +32,7 @@ import io.github.byte256.actualgame.utils.Quiz;
 public class GameActivity extends AppCompatActivity {
 
     private Quiz[] quizzes;
-    private int[] counter = {0};
+    private final int[] counter = {0};
     private int score = 0;
 
     @Override
