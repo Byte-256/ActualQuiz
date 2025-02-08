@@ -1,0 +1,54 @@
+{
+  "quizzes": [
+    {
+      "question": "What do you call an educated tube?",
+      "options": [
+        "A graduated cylinder!",
+        "A test tube!",
+        "A beaker!",
+        "A pipette!"
+      ],
+      "correctAnswer": "A graduated cylinder!"
+    },
+    {
+      "question": "Why can't you trust an atom?",
+      "options": [
+        "Because they make up everything!",
+        "Because they are too small!",
+        "Because they are unstable!",
+        "Because they are negative!"
+      ],
+      "correctAnswer": "Because they make up everything!"
+    },
+    {
+      "question": "What did the biologist wear to impress their date?",
+      "options": [
+        "Designer genes!",
+        "A lab coat!",
+        "Safety goggles!",
+        "A microscope!"
+      ],
+      "correctAnswer": "Designer genes!"
+    },
+    {
+      "question": "Why did the physics teacher break up with the biology teacher?",
+      "options": [
+        "There was no chemistry!",
+        "They had different interests!",
+        "They were too busy!",
+        "They lived too far apart!"
+      ],
+      "correctAnswer": "There was no chemistry!"
+    },
+    {
+      "question": "What is a physicist's favorite type of music?",
+      "options": [
+        "Heavy metal!",
+        "Classical!",
+        "Jazz!",
+        "Pop!"
+      ],
+      "correctAnswer": "Heavy metal!"
+    }
+  ]
+}
