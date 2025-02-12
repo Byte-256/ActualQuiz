@@ -26,25 +26,26 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button start, exit;
+        Button start, exit, start2;
 
         start = findViewById(R.id.start_game);
         exit = findViewById(R.id.close);
+        start2 = findViewById(R.id.start_game_2);
 
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Started!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                startActivity(intent);
-            }
+        start.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Started!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, GameActivity.class);
+            startActivity(intent);
         });
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Exited!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+
+        start2.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Started!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, Game2Activity.class);
+            startActivity(intent);
+        });
+        exit.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Exited!", Toast.LENGTH_SHORT).show();
+            finish();
         });
 
     }
