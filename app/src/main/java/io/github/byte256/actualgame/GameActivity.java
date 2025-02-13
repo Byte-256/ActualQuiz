@@ -1,185 +1,88 @@
 package io.github.byte256.actualgame;
-
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.DragEvent;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import io.github.byte256.actualgame.utils.Quiz;
+import io.github.byte256.actualgame.utils.QuizQuestion;
 
 public class GameActivity extends AppCompatActivity {
+    private TextView questionText;
+    private GridLayout letterGrid;      // Grid for scrambled letters
+    private GridLayout answerGrid;      // Grid for answer spaces
+    private Button checkButton, clearButton, skipButton;
+    private String currentWord;
+    private String scrambledWord;
+    private List<TextView> letterViews;
+    private List<TextView> answerSpaces;
 
-    private Quiz[] quizzes;
-    private final int[] counter = {0};
+    private final QuizQuestion[] questions = {
+            new QuizQuestion("What is the largest land animal?", "ELEPHANT"),
+            new QuizQuestion("What is the closest star to Earth?", "SUN"),
+            new QuizQuestion("Which planet is known as the Red Planet?", "MARS")
+    };
+    private int currentQuestionIndex = 0;
     private int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_game);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        setContentView(R.layout.activity_game2);
 
+        questionText = findViewById(R.id.questionText);
+        letterGrid = findViewById(R.id.letterGrid);
+        answerGrid = findViewById(R.id.answerGrid);
+        checkButton = findViewById(R.id.checkButton);
+        skipButton = findViewById(R.id.skipButton);
+        clearButton = findViewById(R.id.clearButton);
 
+        letterViews = new ArrayList<>();
+        answerSpaces = new ArrayList<>();
 
-        TextView questionTextView = findViewById(R.id.question);
-        RadioGroup optionsGroup = findViewById(R.id.optionsGroup);
-        Button nextButton = findViewById(R.id.next);
-        Button skipButton = findViewById(R.id.skip);
-        ImageButton prevButton = findViewById(R.id.previous_question);
-
-
-        quizzes = Quizloader();
-
-        if (quizzes.length > 0) {
-            displayQuestion(counter[0], questionTextView, optionsGroup);
-        }
-
-        prevButton.setOnClickListener(v -> {
-            prev_quest(counter);
-            displayQuestion(counter[0], questionTextView, optionsGroup);
-            Log.d("Pagination", "Previous Question -> "+(counter[0]+1));
-        });
-
-        nextButton.setOnClickListener(v -> {
-            validateAnswer(counter[0], optionsGroup);
-            displayQuestion(counter[0], questionTextView, optionsGroup);
-            Log.d("pagination", "Next Question -> "+(counter[0]+1));
-        });
-
-        skipButton.setOnClickListener(v -> {
-            Log.d("pagination", "Skipped! Question -> "+(counter[0]+1));
-            next_quest(counter);
-            displayQuestion(counter[0], questionTextView, optionsGroup);
-        });
-
+        setupButtons();
+        loadQuestion(currentQuestionIndex);
     }
 
-    private Quiz[] Quizloader() {
-        String json = null;
-        try {
-            AssetManager assetManager = this.getAssets();
-            InputStream inputStream = assetManager.open("quest.json");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-            json = stringBuilder.toString();
-            reader.close();
-        } catch (IOException e) {
-            Log.e("Quiz Loader IO",e.toString());
-        }
-
-        // Parse the JSON data
-        if (json != null) {
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                JSONArray quizzesArray = jsonObject.getJSONArray("quizzes");
-                Quiz[] quizzes = new Quiz[quizzesArray.length()];
-                for (int i = 0; i < quizzesArray.length(); i++) {
-                    JSONObject quiz = quizzesArray.getJSONObject(i);
-                    String question = quiz.getString("question");
-                    JSONArray optionsArray = quiz.getJSONArray("options");
-                    String[] options = new String[optionsArray.length()];
-                    for (int j = 0; j < optionsArray.length(); j++) {
-                        options[j] = optionsArray.getString(j);
-                    }
-                    String correctAnswer = quiz.getString("correctAnswer");
-                    quizzes[i] = new Quiz(question, options, correctAnswer);
-                }
-                return quizzes;
-            } catch (JSONException e) {
-                Log.e("Parse Json",e.toString());
-            }
-        }
-        return new Quiz[0];
+    private void setupButtons() {
+        checkButton.setOnClickListener(v -> checkAnswer());
+        clearButton.setOnClickListener(v -> clearAnswer());
+        skipButton.setOnClickListener(v -> { currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex); });
     }
 
-    private void validateAnswer(int c, RadioGroup options) {
-        int selected_btn_id = options.getCheckedRadioButtonId();
-        RadioButton selected_btn = findViewById(selected_btn_id);
-        String selected_answer = selected_btn.getText().toString().trim();
-
-        if (selected_btn_id != -1){
-            if (selected_answer.equals(quizzes[c].getCorrectAnswer())) {
-                score++;
-                Log.d("validation", "correct");
-                Log.d("validation", "scroe is " + score);
-            }
-            else {
-               Log.d("validation", "Wrong!");
-            }
-            next_quest(counter);
-        }
-        else {
-            Toast.makeText(this, "Please select an answer! or Skip the Question", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void displayQuestion(int i, TextView questionTextView, RadioGroup optionsGroup) {
-
-        optionsGroup.removeAllViews(); // Clean the ground for new ones
-
-        questionTextView.setText(quizzes[i].getQuestion());
-
-        String[] options = quizzes[i].getOptions();
-
-        for (String option : options){
-            RadioButton btn = new RadioButton(this);
-            btn.setText(option);
-            optionsGroup.addView(btn); // Arrange the new ones
-        }
-
-    }
-
-    public void prev_quest(int[] c){
-        if(c[0] > 0){
-            c[0]--;
+    private void loadQuestion(int index) {
+        if (index < questions.length) {
+            QuizQuestion question = questions[index];
+            questionText.setText(question.getQuestion());
+            currentWord = question.getAnswer();
+            scrambledWord = scrambleWord(currentWord);
+            createLetterSpaces();
+            createAnswerSpaces();
         } else {
-            Toast.makeText(this, "First Question!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void next_quest(int[] c){
-        if (c[0] < quizzes.length - 1){
-            c[0]++;
-        }
-        else {
-            Toast.makeText(this, "Reached Final Question!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Quiz completed!", Toast.LENGTH_LONG).show();
             final_screen();
         }
     }
 
     private void store_result() {
-        int total_questions = quizzes.length;
+        int total_questions = questions.length;
         int correct_answers = score;
 
         float percentage = (float) correct_answers / total_questions * 100;
@@ -192,15 +95,14 @@ public class GameActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
 
         String history = pref.getString("history", "");
-        String newEntry = "Date: " + now + " - Score: " + score + "/" + quizzes.length + " (" + percentage_int + "%)\n";
+        String newEntry = "Date: " + now + " - Score: " + score + "/" + questions.length + " (" + percentage_int + "%)\n";
 
         editor.putString("history", history + newEntry);
         editor.apply();
     }
-
     private void final_screen() {
         store_result();
-        int total_questions = quizzes.length;
+        int total_questions = questions.length;
         int correct_answers = score;
         float percentage = (float) correct_answers / total_questions * 100;
         int percentage_int = (int) Math.floor(percentage);
@@ -210,5 +112,166 @@ public class GameActivity extends AppCompatActivity {
 
         startActivity(intent);
         finish();
+    }
+
+    public int dpToPx(int dp) {
+        float density = this.getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
+    }
+    private void createLetterSpaces() {
+        letterGrid.removeAllViews();
+        letterViews.clear();
+
+        for (char letter : scrambledWord.toCharArray()) {
+            TextView letterView = new TextView(this);
+            letterView.setText(String.valueOf(letter));
+            letterView.setTextSize(24);
+            letterView.setTextColor(Color.parseColor("#438F82"));
+            letterView.setGravity(Gravity.CENTER);
+            letterView.setPadding(16, 16, 16, 16);
+            letterView.setBackgroundResource(R.drawable.circle_outline);
+
+            letterView.setWidth(dpToPx(48));
+            letterView.setHeight(dpToPx(48));
+
+            // Setup drag functionality
+            letterView.setOnLongClickListener(v -> {
+                ClipData.Item item = new ClipData.Item(letterView.getText().toString());
+                ClipData dragData = new ClipData(
+                        letterView.getText().toString(),
+                        new String[]{ClipDescription.MIMETYPE_TEXT_PLAIN},
+                        item
+                );
+
+                View.DragShadowBuilder shadow = new View.DragShadowBuilder(letterView);
+                letterView.startDragAndDrop(dragData, shadow, letterView, 0);
+                letterView.setVisibility(View.INVISIBLE);
+                return true;
+            });
+
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.setMargins(12, 12, 12, 12);
+
+            letterGrid.addView(letterView, params);
+            letterViews.add(letterView);
+        }
+    }
+
+    private void createAnswerSpaces() {
+        answerGrid.removeAllViews();
+        answerSpaces.clear();
+
+        for (int i = 0; i < currentWord.length(); i++) {
+            TextView space = new TextView(this);
+            space.setText("_");
+            space.setTextSize(24);
+            space.setGravity(Gravity.CENTER);
+            space.setTextColor(Color.parseColor("#438F82")); // set color
+
+            space.setPadding(24, 24, 24, 24);
+
+            space.setBackgroundResource(R.drawable.circle_outline);
+
+            space.setWidth(dpToPx(48));
+            space.setHeight(dpToPx(48));
+
+            space.setTag("empty");
+
+            // Setup drop functionality
+            space.setOnDragListener(this::handleDrag);
+
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.setMargins(12, 12, 12, 12);
+
+            answerGrid.addView(space, params);
+            answerSpaces.add(space);
+        }
+    }
+
+    private boolean handleDrag(View view, DragEvent event) {
+        TextView target = (TextView) view;
+
+        switch (event.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                return event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN);
+
+            case DragEvent.ACTION_DRAG_ENTERED:
+                view.setBackgroundResource(R.drawable.circle_outline_selected);
+                return true;
+
+            case DragEvent.ACTION_DRAG_EXITED:
+                view.setBackgroundResource(R.drawable.circle_outline);
+                return true;
+
+            case DragEvent.ACTION_DROP:
+                ClipData.Item item = event.getClipData().getItemAt(0);
+                String draggedLetter = item.getText().toString();
+
+                if (target.getTag().equals("empty")) {
+                    target.setText(draggedLetter);
+                    target.setTag("filled");
+                    View draggedView = (View) event.getLocalState();
+                    draggedView.setVisibility(View.INVISIBLE);
+                    return true;
+                }
+                return false;
+
+            case DragEvent.ACTION_DRAG_ENDED:
+                view.setBackgroundResource(R.drawable.circle_outline);
+                View draggedView = (View) event.getLocalState();
+                if (!event.getResult()) {
+                    draggedView.setVisibility(View.VISIBLE);
+                }
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    private void checkAnswer() {
+        StringBuilder answer = new StringBuilder();
+        for (TextView space : answerSpaces) {
+            if (space.getTag().equals("filled")) {
+                answer.append(space.getText());
+            }
+        }
+
+        if (answer.toString().equals(currentWord)) {
+            Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
+            score++;
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        } else {
+            Toast.makeText(this, "Try again!", Toast.LENGTH_SHORT).show();
+            clearAnswer();
+        }
+    }
+
+    private void clearAnswer() {
+        for (TextView letterView : letterViews) {
+            letterView.setVisibility(View.VISIBLE);
+        }
+        for (TextView space : answerSpaces) {
+            space.setText("_");
+            space.setTag("empty");
+        }
+    }
+
+    private String scrambleWord(String word) {
+        List<Character> chars = new ArrayList<>();
+        for (char c : word.toCharArray()) {
+            chars.add(c);
+        }
+        Collections.shuffle(chars);
+        StringBuilder scrambled = new StringBuilder();
+        for (char c : chars) {
+            scrambled.append(c);
+        }
+        return scrambled.toString();
     }
 }

@@ -10,16 +10,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ActualGame"
+        android:theme="@style/Theme.MyApp"
         tools:targetApi="31">
         <activity
-            android:name=".Game2Activity"
+            android:name=".GameActivity"
             android:exported="false" />
         <activity
             android:name=".ResultActivity"
-            android:exported="false" />
-        <activity
-            android:name=".GameActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

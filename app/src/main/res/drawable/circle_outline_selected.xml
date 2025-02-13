@@ -1,0 +1,8 @@
+<!-- res/drawable/circle_outline.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <stroke
+        android:width="4dp"
+        android:color="#FF5722" />  <!-- Color of the outline -->
+    <solid android:color="@android:color/transparent" /> <!-- Make the circle transparent inside -->
+</shape>
