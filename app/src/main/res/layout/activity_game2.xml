@@ -19,22 +19,30 @@
     <!-- Grid for answer spaces -->
     <GridLayout
         android:id="@+id/answerGrid"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="48dp"
         android:columnCount="8"
-        android:foregroundGravity="center"
-        android:layout_marginBottom="48dp"/>
+        android:foregroundGravity="center_horizontal"/>
 
     <!-- Grid for letter choices -->
+<!--    <TextView-->
+<!--        android:text="A"-->
+<!--        android:background="@android:drawable/btn_default"-->
+<!--        android:layout_marginBottom="12dp"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginEnd="8dp"/>-->
     <GridLayout
         android:id="@+id/letterGrid"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="48dp"
         android:columnCount="8"
-        android:foregroundGravity="center"
-        android:layout_marginBottom="24dp"/>
+        android:foregroundGravity="center_horizontal"/>
 
     <LinearLayout
         android:layout_width="match_parent"

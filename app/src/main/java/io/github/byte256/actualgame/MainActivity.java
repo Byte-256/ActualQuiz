@@ -2,7 +2,6 @@ package io.github.byte256.actualgame;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -30,18 +29,21 @@ public class MainActivity extends AppCompatActivity {
 
         start = findViewById(R.id.start_game);
         exit = findViewById(R.id.close);
+        exit = findViewById(R.id.close);
         start2 = findViewById(R.id.start_game_2);
 
         start.setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Started!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, GameActivity.class);
             startActivity(intent);
+            finish();
         });
 
         start2.setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Started!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, Game2Activity.class);
             startActivity(intent);
+            finish();
         });
         exit.setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Exited!", Toast.LENGTH_SHORT).show();

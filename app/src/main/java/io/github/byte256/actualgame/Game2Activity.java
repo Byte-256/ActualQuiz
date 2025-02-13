@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -36,7 +37,6 @@ public class Game2Activity extends AppCompatActivity {
     private final QuizQuestion[] questions = {
             new QuizQuestion("What is the largest land animal?", "ELEPHANT"),
             new QuizQuestion("What is the closest star to Earth?", "SUN"),
-//            new QuizQuestion("GOPAL is ?", "GAY"),
             new QuizQuestion("Which planet is known as the Red Planet?", "MARS")
     };
     private int currentQuestionIndex = 0;
@@ -124,6 +124,7 @@ public class Game2Activity extends AppCompatActivity {
             TextView letterView = new TextView(this);
             letterView.setText(String.valueOf(letter));
             letterView.setTextSize(24);
+            letterView.setGravity(Gravity.CENTER);
             letterView.setPadding(16, 16, 16, 16);
             letterView.setBackgroundResource(android.R.drawable.btn_default);
 
@@ -145,7 +146,7 @@ public class Game2Activity extends AppCompatActivity {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = GridLayout.LayoutParams.WRAP_CONTENT;
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            params.setMargins(8, 8, 8, 8);
+            params.setMargins(12, 12, 12, 12);
 
             letterGrid.addView(letterView, params);
             letterViews.add(letterView);
@@ -170,7 +171,7 @@ public class Game2Activity extends AppCompatActivity {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = GridLayout.LayoutParams.WRAP_CONTENT;
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            params.setMargins(8, 8, 8, 8);
+            params.setMargins(12, 12, 12, 12);
 
             answerGrid.addView(space, params);
             answerSpaces.add(space);
