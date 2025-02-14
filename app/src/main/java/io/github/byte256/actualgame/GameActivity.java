@@ -5,38 +5,39 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.github.byte256.actualgame.utils.QuizLoader;
 import io.github.byte256.actualgame.utils.QuizQuestion;
 
 public class GameActivity extends AppCompatActivity {
-    private TextView questionText;
+    private TextView questionText, questionLabel;
     private GridLayout letterGrid;      // Grid for scrambled letters
     private GridLayout answerGrid;      // Grid for answer spaces
     private Button checkButton, clearButton, skipButton;
+    private ImageButton closeButton;
     private String currentWord;
     private String scrambledWord;
     private List<TextView> letterViews;
     private List<TextView> answerSpaces;
 
-    private final QuizQuestion[] questions = {
-            new QuizQuestion("What is the largest land animal?", "ELEPHANT"),
-            new QuizQuestion("What is the closest star to Earth?", "SUN"),
-            new QuizQuestion("Which planet is known as the Red Planet?", "MARS")
-    };
+    private List<QuizQuestion> questions;
     private int currentQuestionIndex = 0;
     private int score = 0;
 
@@ -44,14 +45,26 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_game2);
+        setContentView(R.layout.activity_game);
+
+        QuizLoader loader = new QuizLoader(this);
+        try {
+
+            questions = loader.getQuizzez();
+
+        } catch (IOException e) {
+            Log.e("onCreate: ",e.toString() );
+        }
 
         questionText = findViewById(R.id.questionText);
+        questionLabel = findViewById(R.id.question_label);
         letterGrid = findViewById(R.id.letterGrid);
         answerGrid = findViewById(R.id.answerGrid);
         checkButton = findViewById(R.id.checkButton);
         skipButton = findViewById(R.id.skipButton);
         clearButton = findViewById(R.id.clearButton);
+        closeButton = findViewById(R.id.close_icon);
+
 
         letterViews = new ArrayList<>();
         answerSpaces = new ArrayList<>();
@@ -63,13 +76,16 @@ public class GameActivity extends AppCompatActivity {
     private void setupButtons() {
         checkButton.setOnClickListener(v -> checkAnswer());
         clearButton.setOnClickListener(v -> clearAnswer());
+        closeButton.setOnClickListener(v -> finish());
         skipButton.setOnClickListener(v -> { currentQuestionIndex++;
             loadQuestion(currentQuestionIndex); });
     }
 
     private void loadQuestion(int index) {
-        if (index < questions.length) {
-            QuizQuestion question = questions[index];
+        if (index < questions.size()) {
+            questionLabel.setText(String.format("Question: %d", index));
+
+            QuizQuestion question = questions.get(index);
             questionText.setText(question.getQuestion());
             currentWord = question.getAnswer();
             scrambledWord = scrambleWord(currentWord);
@@ -82,7 +98,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void store_result() {
-        int total_questions = questions.length;
+        int total_questions = questions.size();
         int correct_answers = score;
 
         float percentage = (float) correct_answers / total_questions * 100;
@@ -95,14 +111,14 @@ public class GameActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
 
         String history = pref.getString("history", "");
-        String newEntry = "Date: " + now + " - Score: " + score + "/" + questions.length + " (" + percentage_int + "%)\n";
+        String newEntry = "Date: " + now + " - Score: " + score + "/" + questions.size() + " (" + percentage_int + "%)\n";
 
         editor.putString("history", history + newEntry);
         editor.apply();
     }
     private void final_screen() {
         store_result();
-        int total_questions = questions.length;
+        int total_questions = questions.size();
         int correct_answers = score;
         float percentage = (float) correct_answers / total_questions * 100;
         int percentage_int = (int) Math.floor(percentage);
@@ -128,7 +144,7 @@ public class GameActivity extends AppCompatActivity {
             letterView.setTextSize(24);
             letterView.setTextColor(Color.parseColor("#438F82"));
             letterView.setGravity(Gravity.CENTER);
-            letterView.setPadding(16, 16, 16, 16);
+            letterView.setPadding(8, 8, 8, 8);
             letterView.setBackgroundResource(R.drawable.circle_outline);
 
             letterView.setWidth(dpToPx(48));
@@ -152,7 +168,7 @@ public class GameActivity extends AppCompatActivity {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = GridLayout.LayoutParams.WRAP_CONTENT;
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            params.setMargins(12, 12, 12, 12);
+            params.setMargins(8, 8, 8, 8);
 
             letterGrid.addView(letterView, params);
             letterViews.add(letterView);
@@ -170,7 +186,7 @@ public class GameActivity extends AppCompatActivity {
             space.setGravity(Gravity.CENTER);
             space.setTextColor(Color.parseColor("#438F82")); // set color
 
-            space.setPadding(24, 24, 24, 24);
+            space.setPadding(8, 8, 8, 8);
 
             space.setBackgroundResource(R.drawable.circle_outline);
 

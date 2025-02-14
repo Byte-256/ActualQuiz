@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
     <!-- Top Rounded Corner Container -->
+
+    <!-- Answer Options -->
     <RelativeLayout
         android:id="@+id/top_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="100dp"
+        android:layout_height="220dp"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
         android:background="@drawable/rounded_top_container"
         android:backgroundTint="#438F82"
-        android:padding="24dp">
+        android:padding="24dp"
+        android:paddingVertical="100dp"
+        android:paddingTop="200dp">
 
         <!-- Pressure: Easy -->
         <TextView
@@ -24,15 +29,20 @@
             android:layout_alignParentStart="true"
             android:text="Pressure: Easy"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginTop="32dp"
+            tools:ignore="HardcodedText" />
 
         <!-- Close Icon (X) -->
-        <ImageView
+        <ImageButton
             android:id="@+id/close_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:layout_marginTop="24dp"
+            android:background="@android:drawable/ic_menu_close_clear_cancel"
+            android:importantForAccessibility="no"
             app:tint="#FFFFFF" />
 
         <!-- Question Label -->
@@ -44,7 +54,8 @@
             android:layout_marginTop="16dp"
             android:text="Question:"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:ignore="HardcodedText" />
 
         <!-- Question Text -->
         <TextView
@@ -57,56 +68,17 @@
             android:textSize="32sp" />
     </RelativeLayout>
 
-    <!-- Answer Options -->
+    <!-- Answer Spaces   -->
     <GridLayout
         android:id="@+id/answerGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/top_container"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:gravity="center"
         android:columnCount="6"
-        android:foregroundGravity="center_horizontal">
-<!--        &lt;!&ndash; Option 1 &ndash;&gt;-->
-<!--        <ImageView-->
-<!--            android:id="@+id/option1"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:background="@drawable/circle_outline"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:padding="8dp"-->
-<!--            android:src="@null"-->
-<!--            android:tint="#438F82" />-->
-
-<!--        &lt;!&ndash; Option 2 &ndash;&gt;-->
-<!--        <ImageView-->
-<!--            android:id="@+id/option2"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:background="@drawable/circle_outline"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:padding="8dp"-->
-<!--            android:src="@null"-->
-<!--            android:tint="#438F82" />-->
-
-<!--        &lt;!&ndash; Option 3 &ndash;&gt;-->
-<!--        <ImageView-->
-<!--            android:id="@+id/option3"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:background="@drawable/circle_outline"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:padding="8dp"-->
-<!--            android:src="@null"-->
-<!--            android:tint="#438F82" />-->
-
-    </GridLayout>
+        android:foregroundGravity="center_horizontal"/>
 
     <!-- Letter Choices -->
     <GridLayout
@@ -115,53 +87,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/answerGrid"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="64dp"
         android:gravity="center"
         android:columnCount="6"
         android:foregroundGravity="center_horizontal"
-        android:orientation="horizontal">
-
-<!--        &lt;!&ndash; Choice E &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/choice_e"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:background="@drawable/circle_outline"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:gravity="center"-->
-<!--            android:text="E"-->
-<!--            android:textColor="#438F82"-->
-<!--            android:textSize="20sp" />-->
-
-<!--        &lt;!&ndash; Choice D &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/choice_d"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:background="@drawable/circle_outline"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:gravity="center"-->
-<!--            android:text="D"-->
-<!--            android:textColor="#438F82"-->
-<!--            android:textSize="20sp" />-->
-
-<!--        &lt;!&ndash; Choice R &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/choice_r"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:background="@drawable/circle_outline"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:gravity="center"-->
-<!--            android:text="R"-->
-<!--            android:textColor="#438F82"-->
-<!--            android:textSize="20sp" />-->
-    </GridLayout>
+        android:orientation="horizontal"/>
 
     <!-- Bottom Buttons -->
     <LinearLayout
@@ -186,7 +116,8 @@
             android:layout_marginEnd="12dp"
             android:paddingBottom="12dp"
             android:text="Next"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            tools:ignore="ButtonStyle,HardcodedText" />
 
         <!-- Clear Button -->
         <Button
@@ -200,7 +131,8 @@
             android:paddingEnd="32dp"
             android:paddingBottom="12dp"
             android:text="Clear"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            tools:ignore="ButtonStyle,HardcodedText" />
 
         <!-- Skip Button -->
         <Button
@@ -215,7 +147,8 @@
             android:paddingEnd="32dp"
             android:paddingBottom="12dp"
             android:text="Skip"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            tools:ignore="ButtonStyle,HardcodedText" />
     </LinearLayout>
 
 </RelativeLayout>
