@@ -33,10 +33,10 @@ public class ResultActivity extends AppCompatActivity {
         res.setTextColor(BLACK);
         res.setText(String.format("%s%%", percentage));
 
-        SharedPreferences prefs = getSharedPreferences("QuizHistory", MODE_PRIVATE);
-        String history = prefs.getString("history", "No previous results.");
-        TextView historyTextView = findViewById(R.id.historyText);
-        historyTextView.setText(history);
+//        SharedPreferences prefs = getSharedPreferences("QuizHistory", MODE_PRIVATE);
+//        String history = prefs.getString("history", "No previous results.");
+//        TextView historyTextView = findViewById(R.id.historyText);
+//        historyTextView.setText(history);
 
         Button home = findViewById(R.id.home);
 
