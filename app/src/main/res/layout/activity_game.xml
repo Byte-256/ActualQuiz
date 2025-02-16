@@ -12,7 +12,7 @@
     <RelativeLayout
         android:id="@+id/top_container"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
         android:background="@drawable/rounded_top_container"

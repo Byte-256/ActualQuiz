@@ -10,8 +10,9 @@
 
         <!-- Logo & Animation -->
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/logo"
             android:background="@drawable/ic_launcher_background"
             android:scaleType="fitCenter"

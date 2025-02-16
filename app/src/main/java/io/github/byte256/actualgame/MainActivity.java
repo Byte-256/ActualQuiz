@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         start.setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Started!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, GameActivity.class);
+            Intent intent = new Intent(MainActivity.this, PressuresActivity.class);
             startActivity(intent);
         });
         exit.setOnClickListener(v -> {

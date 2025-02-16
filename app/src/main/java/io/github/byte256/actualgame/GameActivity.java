@@ -22,12 +22,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.byte256.actualgame.utils.QuizLoader;
 import io.github.byte256.actualgame.utils.QuizQuestion;
 
 public class GameActivity extends AppCompatActivity {
-    private TextView questionText, questionLabel;
+    private TextView questionText;
+    private TextView questionLabel;
     private GridLayout letterGrid;      // Grid for scrambled letters
     private GridLayout answerGrid;      // Grid for answer spaces
     private Button checkButton, clearButton, skipButton;
@@ -40,6 +42,7 @@ public class GameActivity extends AppCompatActivity {
     private List<QuizQuestion> questions;
     private int currentQuestionIndex = 0;
     private int score = 0;
+    private String level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +50,26 @@ public class GameActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_game);
 
+        level = getIntent().getStringExtra("level_name");
+
+        if(level == null || level.equals(" ")){
+            level = "easy1";
+        }
+
         QuizLoader loader = new QuizLoader(this);
         try {
-
-            questions = loader.getQuizzez();
-
+            questions = loader.getQuizzez(level);
         } catch (IOException e) {
             Log.e("onCreate: ",e.toString() );
         }
 
         questionText = findViewById(R.id.questionText);
         questionLabel = findViewById(R.id.question_label);
+        TextView pressureLabel = findViewById(R.id.pressure_text);
+
         letterGrid = findViewById(R.id.letterGrid);
         answerGrid = findViewById(R.id.answerGrid);
+
         checkButton = findViewById(R.id.checkButton);
         skipButton = findViewById(R.id.skipButton);
         clearButton = findViewById(R.id.clearButton);
@@ -69,6 +79,7 @@ public class GameActivity extends AppCompatActivity {
         letterViews = new ArrayList<>();
         answerSpaces = new ArrayList<>();
 
+        pressureLabel.setText(String.format("Pressure: %s", level));
         setupButtons();
         loadQuestion(currentQuestionIndex);
     }
@@ -83,7 +94,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void loadQuestion(int index) {
         if (index < questions.size()) {
-            questionLabel.setText(String.format("Question: %d", index));
+            questionLabel.setText(String.format(Locale.ENGLISH,"Question: %d", index));
 
             QuizQuestion question = questions.get(index);
             questionText.setText(question.getQuestion());
@@ -107,14 +118,20 @@ public class GameActivity extends AppCompatActivity {
 
         long now = System.currentTimeMillis();
 
+//Saving the Score
         SharedPreferences pref = getSharedPreferences("QuizHistory", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
         String history = pref.getString("history", "");
         String newEntry = "Date: " + now + " - Score: " + score + "/" + questions.size() + " (" + percentage_int + "%)\n";
-
         editor.putString("history", history + newEntry);
         editor.apply();
+
+//Saving the Level Progress
+        SharedPreferences level_pref = getSharedPreferences("LevelHistory", MODE_PRIVATE);
+        SharedPreferences.Editor level_editor = level_pref.edit();
+        level_editor.putBoolean(level, true);
+        level_editor.apply();
     }
     private void final_screen() {
         store_result();
