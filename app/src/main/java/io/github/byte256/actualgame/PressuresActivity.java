@@ -2,7 +2,6 @@ package io.github.byte256.actualgame;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
@@ -33,23 +32,18 @@ public class PressuresActivity extends AppCompatActivity {
 
         try {
             levels = quizLoader.getLevels();
-            Log.d("Pressure", "onCreate: "+levels);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        Log.d("Pressure", "getLevels: set" + levels);
 
         List<String> categories = new ArrayList<>(levels);
 
         LevelListAdapter adapter = new LevelListAdapter(this,categories);
 
-//        Log.d("Pressure", "onCreateList: "+categories);
         levelList.setAdapter(adapter);
         levelList.setOnItemClickListener((parent, view, position, id) -> {
             level = categories.get(position);
             // Start game with selected category
-//            Log.d("Pressure", "Category :" + level);
             gotoGame();
         });
     }

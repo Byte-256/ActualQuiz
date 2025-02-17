@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import java.util.List;
 
 import io.github.byte256.actualgame.R;
+
 
 public class LevelListAdapter extends ArrayAdapter<String> {
     private final List<String> items;
@@ -40,8 +42,25 @@ public class LevelListAdapter extends ArrayAdapter<String> {
         textView.setText(items.get(position));
         SharedPreferences prefs = context.getSharedPreferences("LevelHistory", MODE_PRIVATE);
         boolean is_complete = prefs.getBoolean(items.get(position), false);
+        switch (items.get(position)){
+            case "easy 1":
+            case "easy 2":
+                textView.setTextColor(Color.parseColor("#57E61E"));
+                break;
+            case "medium 1":
+            case "medium 2":
+                textView.setTextColor(Color.parseColor("#FFC107"));
+                break;
+            case "intense":
+                textView.setTextColor(Color.parseColor("#F44336"));
+                break;
+            default:
+                textView.setTextColor(Color.parseColor("#000000"));;
+                break;
+        }
         if (is_complete) {
-            textView.setBackgroundColor(Color.parseColor("#00ff00"));
+            textView.setBackground(AppCompatResources.getDrawable(context, R.drawable.pressure_btn_completed));
+            textView.setTextColor(Color.argb(255, 80,80,80));
         }
         return convertView;
     }

@@ -94,7 +94,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void loadQuestion(int index) {
         if (index < questions.size()) {
-            questionLabel.setText(String.format(Locale.ENGLISH,"Question: %d", index));
+            questionLabel.setText(String.format(Locale.ENGLISH,"Question: %d", index+1));
 
             QuizQuestion question = questions.get(index);
             questionText.setText(question.getQuestion());
