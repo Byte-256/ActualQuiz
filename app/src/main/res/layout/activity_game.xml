@@ -36,8 +36,8 @@
         <!-- Close Icon (X) -->
         <ImageButton
             android:id="@+id/close_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="24dp"
@@ -73,12 +73,13 @@
         android:id="@+id/answerGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/top_container"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="64dp"
-        android:gravity="center"
-        android:columnCount="6"
-        android:foregroundGravity="center_horizontal"/>
+        android:clipChildren="false"
+        android:columnCount="7"
+        android:foregroundGravity="center_horizontal"
+        android:gravity="center" />
 
     <!-- Letter Choices -->
     <GridLayout

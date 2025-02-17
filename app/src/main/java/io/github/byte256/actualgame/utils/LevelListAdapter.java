@@ -55,7 +55,7 @@ public class LevelListAdapter extends ArrayAdapter<String> {
                 textView.setTextColor(Color.parseColor("#F44336"));
                 break;
             default:
-                textView.setTextColor(Color.parseColor("#000000"));;
+                textView.setTextColor(Color.parseColor("#000000"));
                 break;
         }
         if (is_complete) {

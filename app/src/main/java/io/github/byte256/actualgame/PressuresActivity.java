@@ -2,6 +2,7 @@ package io.github.byte256.actualgame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +27,10 @@ public class PressuresActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pressures);
 
         ListView levelList = findViewById(R.id.levels);
+        ImageButton close = findViewById(R.id.pressure_close_icon);
+
+        close.setOnClickListener(v -> finish());
+
 
         QuizLoader quizLoader = new QuizLoader(this);
         Set<String> levels;

@@ -20,7 +20,7 @@
         android:paddingTop="200dp">
 
         <ImageButton
-            android:id="@+id/close_icon"
+            android:id="@+id/pressure_close_icon"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_alignParentTop="true"
